@@ -1,20 +1,152 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<mat-card class="header">
+  <mat-card-header>
+    <mat-card-title>Machine Learning Demo Using TensorFlowJS</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div>
+      Analyse sample data. Add more data and Train model. Play with Predictions.
+    </div>
+    <div class="header-div-right">
+      Develop By:
+      <a href="http://www.linkedin.com/in/darpanlalani" target="_blank"
+        >Darpan Lalani
+      </a>
+    </div>
+  </mat-card-content>
+</mat-card>
+<mat-divider></mat-divider>
+<div class="container">
+  <mat-card class="chartContainer">
+    <mat-card-header>
+      <mat-card-title>Machine Learning Prediction</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="modelTrained; else loading">
+        <div class="height-100">
+          <mat-form-field class="full-width">
+            <mat-label>Select Match</mat-label>
+            <mat-select [(value)]="selectedTeam" (valueChange)="result = ''">
+              <mat-option *ngFor="let team of predictTeam" [value]="team.value">
+                {{ team.viewValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="button-right"
+            (click)="prediction()"
+          >
+            Go
+          </button>
+        </div>
+        <div class="result">
+          <h3>Winner: {{ result }}</h3>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <ng-template #loading>
+    <mat-spinner style="margin-left:30%"></mat-spinner>
+    <div class="result"><h5>Model Training in Progress...</h5></div>
+  </ng-template>
 
+  <mat-card class="chartContainer">
+    <mat-card-header>
+      <mat-card-title>Add More Sample</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field class="full-width">
+        <mat-label>Select Match </mat-label>
+        <mat-select [(value)]="selectedSample">
+          <mat-option *ngFor="let team of sampleData" [value]="team.value">
+            {{ team.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="full-width">
+        <mat-label>Select Result</mat-label>
+        <mat-select [(value)]="selectedResult">
+          <mat-option
+            *ngFor="let result of selectedSample.possibleOutput"
+            [value]="result"
+          >
+            Team {{ result }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        class="button-right"
+        (click)="addSample()"
+      >
+        Add Sample
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        class="button-right"
+        (click)="trainModel()"
+      >
+        Train Model
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="container">
+  <mat-card class="chartContainer">
+    <mat-card-header>
+      <mat-card-title>Sample Data: Team A vs Team B</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas
+        baseChart
+        [data]="pieChartData1"
+        [labels]="pieChartLabels1"
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [legend]="pieChartLegend"
+        [colors]="pieChartColors1"
+      >
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="chartContainer">
+    <mat-card-header>
+      <mat-card-title>Sample Data: Team B vs Team C</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas
+        baseChart
+        [data]="pieChartData2"
+        [labels]="pieChartLabels2"
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [legend]="pieChartLegend"
+        [colors]="pieChartColors2"
+      >
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="chartContainer">
+    <mat-card-header>
+      <mat-card-title>Sample Data: Team A vs Team C</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas
+        baseChart
+        [data]="pieChartData3"
+        [labels]="pieChartLabels3"
+        [chartType]="pieChartType"
+        [options]="pieChartOptions"
+        [plugins]="pieChartPlugins"
+        [legend]="pieChartLegend"
+        [colors]="pieChartColors3"
+      >
+      </canvas>
+    </mat-card-content>
+  </mat-card>
+</div>
