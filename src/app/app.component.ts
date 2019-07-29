@@ -22,7 +22,6 @@ export class AppComponent implements OnInit {
   title = 'machine-learning-app';
 
   // Sample Data to display in chart
-
   chartData1 = [7, 3];
   chartData2 = [8, 2];
   chartData3 = [4, 6];
@@ -70,6 +69,7 @@ export class AppComponent implements OnInit {
   model = tf.sequential();
 
   // Sample Input Data for training
+  // Team A => 0, Team B => 1, Team C => 2
   input = [
     [0, 1],
     [1, 2],
@@ -188,7 +188,7 @@ export class AppComponent implements OnInit {
   addSample() {
     console.log(this.selectedResult);
     console.log(this.selectedSample + '--' + this.selectedSample.id);
-    if (this.selectedSample.id > 0  && this.selectedResult !== '')  {
+    if (this.selectedSample.id > 0 && this.selectedResult !== '') {
       this.input.push(this.selectedSample.inputVal);
       this.output.push(this.selectedResult);
       this.inputTensor = tf.tensor(this.input);
@@ -202,25 +202,25 @@ export class AppComponent implements OnInit {
       console.log(this.selectedSample.inputVal);
       if (this.selectedSample.id === 1) {
         if (this.selectedResult === 'A') {
-          this.chartData1[0] ++;
+          this.chartData1[0]++;
         } else {
-          this.chartData1[1] ++;
+          this.chartData1[1]++;
         }
         this.pieChartData1 = [...this.chartData1];
       }
       if (this.selectedSample.id === 2) {
         if (this.selectedResult === 'B') {
-          this.chartData2[0] ++;
+          this.chartData2[0]++;
         } else {
-          this.chartData2[1] ++;
+          this.chartData2[1]++;
         }
         this.pieChartData2 = [...this.chartData2];
       }
       if (this.selectedSample.id === 3) {
         if (this.selectedResult === 'A') {
-          this.chartData3[0] ++;
+          this.chartData3[0]++;
         } else {
-          this.chartData3[1] ++;
+          this.chartData3[1]++;
         }
         this.pieChartData3 = [...this.chartData3];
       }
@@ -251,9 +251,8 @@ export class AppComponent implements OnInit {
   }
 
   // Prediction function
-
   prediction() {
-   // this.result = '';
+    // this.result = '';
     console.log(this.selectedTeam);
     const predictTs = tf.tensor([this.selectedTeam]);
     const t = this.model.predict(predictTs) as tf.Tensor;
